@@ -16,7 +16,7 @@
         #
     ],
     'demo': [
-        #
+        'demo/openacademy_course_demo.xml',
     ],
 
     'installable': True,
