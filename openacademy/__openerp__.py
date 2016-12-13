@@ -14,6 +14,7 @@
 
     'data': [
         'view/openacademy_course_view.xml',
+        'view/openacademy_session_view.xml',
     ],
     'demo': [
         'demo/openacademy_course_demo.xml',
