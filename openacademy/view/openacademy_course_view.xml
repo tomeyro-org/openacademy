@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
   <data>
-    <!-- Form view for Course Model -->
+    <!-- Views for Course Model -->
+
     <record model="ir.ui.view" id="course_form_view">
       <field name="name">course.form.view</field>
       <field name="model">openacademy.course</field>
@@ -24,7 +25,19 @@
       </field>
     </record>
 
+    <record model="ir.ui.view" id="course_search_view">
+      <field name="name">course.search.view</field>
+      <field name="model">openacademy.course</field>
+      <field name="arch" type="xml">
+        <search>
+          <field name="name"/>
+          <field name="description"/>
+        </search>
+      </field>
+    </record>
+
     <!-- Window actions -->
+
     <record  model="ir.actions.act_window" id="course_list_action">
       <field name="name">Courses</field>
       <field name="res_model">openacademy.course</field>
@@ -34,6 +47,8 @@
         <p class="oe_view_nocontent_create">Create the first course</p>
       </field>
     </record>
+
+    <!-- Menus -->
 
     <!-- Top level menu -->
     <menuitem id="main_openacademy_menu" name="Open Academy"/>
