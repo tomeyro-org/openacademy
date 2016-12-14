@@ -1,19 +1,37 @@
 # -*- coding: utf-8 -*-
 
+from datetime import timedelta
 from openerp import models, fields, api, exceptions
 
 
 class Session(models.Model):
     _name = 'openacademy.session'
 
+    _sql_constraints = [
+        ('check_end_gte_start',
+         'CHECK(end_date >= start_date)',
+         "The end date must be greater than the start date"),
+
+        ('check_duration_gte_zero',
+         'CHECK(duration >= 0)',
+         "The duration must be positive"),
+    ]
+
     name = fields.Char(string='Title', required=True)
     start_date = fields.Date(default=fields.Date.today)
-    duration = fields.Float(digits=(6, 2), help="Duration in days")
+    duration = fields.Float(
+        digits=(6, 2),
+        string="Duration in days",
+        help="Duration in days"
+    )
+    end_date = fields.Date(
+        store=True,
+        compute="_get_end_date",
+        inverse="_set_end_date"
+    )
     seats = fields.Integer(string="Number of seats")
-    active = fields.Boolean(default=True)
-
     taken_seats = fields.Float(compute="_taken_seats", default=0.0)
-
+    active = fields.Boolean(default=True)
     instructor_id = fields.Many2one(
         'res.partner',
         string='Instructor',
@@ -30,6 +48,26 @@ class Session(models.Model):
         required=True
     )
     attendee_ids = fields.Many2many('res.partner', string='Attendees')
+
+    @api.one
+    @api.depends('start_date', 'duration')
+    def _get_end_date(self):
+        if not (self.start_date and self.duration):
+            self.end_date = self.start_date
+        else:
+            # Add duration to start_date, but: Mon + 5 days = Sat, so
+            # subtract one second to get on Fri instead
+            start = fields.Datetime.from_string(self.start_date)
+            duration = timedelta(days=self.duration, seconds=-1)
+            self.end_date = start + duration
+
+    def _set_end_date(self):
+        if self.start_date and self.end_date:
+            # Compute the difference between dates, but: Fri - Mon = 4 days,
+            # so add one day to get 5 days instead
+            start_date = fields.Datetime.from_string(self.start_date)
+            end_date = fields.Datetime.from_string(self.end_date)
+            self.duration = (end_date - start_date).days + 1
 
     @api.one
     @api.depends('seats', 'attendee_ids')
