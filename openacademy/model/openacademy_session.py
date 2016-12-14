@@ -7,9 +7,10 @@ class Session(models.Model):
     _name = 'openacademy.session'
 
     name = fields.Char(string='Title', required=True)
-    start_date = fields.Date()
+    start_date = fields.Date(default=fields.Date.today)
     duration = fields.Float(digits=(6, 2), help="Duration in days")
     seats = fields.Integer(string="Number of seats")
+    active = fields.Boolean(default=True)
 
     taken_seats = fields.Float(compute="_taken_seats", default=0.0)
 
