@@ -1,10 +1,20 @@
 # -*- coding: utf-8 -*-
 
-from openerp import models, fields
+from openerp import models, fields, api
 
 
 class Course(models.Model):
     _name = 'openacademy.course'
+
+    _sql_constraints = [
+        ('name_description_check',
+         'CHECK(name != description)',
+         "The title of the course should not be the description"),
+
+        ('name_unique',
+         'UNIQUE(name)',
+         "The course title must be unique"),
+    ]
 
     name = fields.Char(string='Title', required=True)
     description = fields.Text()
@@ -20,3 +30,25 @@ class Course(models.Model):
         'course_id',
         string='Sessions'
     )
+
+    @api.multi
+    def copy(self, default=None):
+        base_copy_name = "Copy of {}"
+        copied_count = self.search_count(
+            [('name', '=ilike', (base_copy_name + "%").format(self.name))]
+        )
+        if not copied_count:
+            new_name = base_copy_name.format(self.name)
+        else:
+            while True:
+                duplicated_count = self.search_count(
+                    [('name', '=ilike', (base_copy_name + " ({})").format(
+                        self.name, copied_count))]
+                )
+                if not duplicated_count:
+                    break
+                else:
+                    copied_count += 1
+            new_name = "Copy of {} ({})".format(self.name, copied_count)
+        default['name'] = new_name
+        return super(Course, self).copy(default)
