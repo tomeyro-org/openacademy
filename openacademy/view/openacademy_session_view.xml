@@ -21,6 +21,7 @@
               <field name="duration" readonly="1"/>
               <field name="seats"/>
               <field name="taken_seats" widget="progressbar"/>
+              <field name="attendees_count"/>
             </group>
             <label for="attendee_ids"/>
             <field name="attendee_ids"/>
@@ -69,13 +70,24 @@
       </field>
     </record>
 
+    <record model="ir.ui.view" id="session_graph_view">
+      <field name="name">session.graph.view</field>
+      <field name="model">openacademy.session</field>
+      <field name="arch" type="xml">
+        <graph string="Participations by Courses">
+          <field name="course_id"/>
+          <field name="attendees_count" type="measure"/>
+        </graph>
+      </field>
+    </record>
+
     <!-- Window actions -->
 
     <record  model="ir.actions.act_window" id="session_list_action">
       <field name="name">Sessions</field>
       <field name="res_model">openacademy.session</field>
       <field name="view_type">form</field>
-      <field name="view_mode">calendar,tree,gantt,form</field>
+      <field name="view_mode">calendar,tree,gantt,graph,form</field>
       <field name="help" type="html">
         <p class="oe_view_nocontent_create">Create the first session</p>
       </field>

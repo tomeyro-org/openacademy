@@ -53,6 +53,10 @@ class Session(models.Model):
         required=True
     )
     attendee_ids = fields.Many2many('res.partner', string='Attendees')
+    attendees_count = fields.Integer(
+        store=True,
+        compute='_get_attendees_count'
+    )
 
     @api.one
     @api.depends('start_date', 'duration')
@@ -89,6 +93,11 @@ class Session(models.Model):
             self.taken_seats = 100 * len(self.attendee_ids) / self.seats
         else:
             self.taken_seats = 0
+
+    @api.one
+    @api.depends('attendee_ids')
+    def _get_attendees_count(self):
+        self.attendees_count = len(self.attendee_ids)
 
     @api.onchange('seats', 'attendee_ids')
     def _verify_valid_seats(self):
