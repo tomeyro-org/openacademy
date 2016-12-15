@@ -37,6 +37,7 @@ class Session(models.Model):
     seats = fields.Integer(string="Number of seats")
     taken_seats = fields.Float(compute="_taken_seats", default=0.0)
     active = fields.Boolean(default=True)
+    color = fields.Integer()
     instructor_id = fields.Many2one(
         'res.partner',
         string='Instructor',
