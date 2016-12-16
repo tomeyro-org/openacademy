@@ -18,6 +18,8 @@
         'view/openacademy_session_view.xml',
         'view/openacademy_session_workflow.xml',
         'view/partner_view.xml',
+        'security/security.xml',
+        'security/ir.model.access.csv',
     ],
     'demo': [
         'demo/openacademy_course_demo.xml',
