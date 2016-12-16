@@ -20,6 +20,7 @@
         'view/partner_view.xml',
         'security/security.xml',
         'security/ir.model.access.csv',
+        'view/openacademy_wizard_view.xml',
     ],
     'demo': [
         'demo/openacademy_course_demo.xml',
