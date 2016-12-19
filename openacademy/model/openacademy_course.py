@@ -32,7 +32,7 @@ class Course(models.Model):
     )
 
     @api.multi
-    def copy(self, default=None):
+    def copy(self, default={}):
         copied_count = self.search_count(
             [('name', '=ilike', (_("Copy of {}") + "%").format(self.name))]
         )
