@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from openerp import models, fields, api
+from openerp import models, fields, api, _
 
 
 class Course(models.Model):
@@ -33,22 +33,22 @@ class Course(models.Model):
 
     @api.multi
     def copy(self, default=None):
-        base_copy_name = "Copy of {}"
         copied_count = self.search_count(
-            [('name', '=ilike', (base_copy_name + "%").format(self.name))]
+            [('name', '=ilike', (_("Copy of {}") + "%").format(self.name))]
         )
         if not copied_count:
-            new_name = base_copy_name.format(self.name)
+            new_name = _("Copy of {}").format(self.name)
         else:
             while True:
                 duplicated_count = self.search_count(
-                    [('name', '=ilike', (base_copy_name + " ({})").format(
+                    [('name', '=ilike', _("Copy of {} ({})").format(
                         self.name, copied_count))]
                 )
                 if not duplicated_count:
                     break
                 else:
                     copied_count += 1
-            new_name = "Copy of {} ({})".format(self.name, copied_count)
+            new_name = _("Copy of {} ({})").format(
+                self.name, copied_count)
         default['name'] = new_name
         return super(Course, self).copy(default)
