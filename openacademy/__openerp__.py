@@ -11,7 +11,7 @@
     'category': "Test",
     'version': "0.1",
 
-    'depends': ["base"],
+    'depends': ["base", "board"],
 
     'data': [
         'view/openacademy_course_view.xml',
@@ -22,6 +22,7 @@
         'security/ir.model.access.csv',
         'view/openacademy_wizard_view.xml',
         'report/openacademy_session_report.xml',
+        'view/session_board.xml',
     ],
     'demo': [
         'demo/openacademy_course_demo.xml',
